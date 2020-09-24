@@ -25,3 +25,14 @@ jobs:
             cp hugo_installation_config.txt /etc/yum.repos.d/CentOS-hugo.repo
             yum install -y hugo
             hugo version
+
+ 
+      - run:
+          name: Build Website
+          command: |
+            cd voiceserverlesswebsite
+            hugo
+
+      - deploy:
+          command: |
+            aws s3 sync --delete --acl "public-read" --sse "AES256" voiceserverlesswebsite/public/ s3://first-polly-website-bucket            
