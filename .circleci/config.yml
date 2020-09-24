@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Add articles to be converted to audio by Polly
           command: |
-            aws s3 sync serverlesspollywebsite/articles/ s3://first-polly-website-bucket-code-bkt/articles/            
+            aws s3 sync serverlesspollywebsite/articles/ s3://polly-bucket-madeby-cicrcleci/articles/            
 
  
       - run:
@@ -39,4 +39,58 @@ jobs:
 
       - deploy:
           command: |
-            aws s3 sync --delete --acl "public-read" --sse "AES256" serverlesspollywebsite/public/ s3://first-polly-website-bucket            
+            aws s3 sync --delete --acl "public-read" --sse "AES256" serverlesspollywebsite/public/ s3://first-polly-website-bucket  
+
+  lambda_build:
+      docker:
+        - image: amazonlinux
+      
+      working_directory: ~/repo
+
+      steps:
+        - checkout
+
+        - run:
+            name: Install Python 3.6
+            command: |
+              amazon-linux-extras install python3 -y
+
+        - run:
+            name: Install AWS CLI
+            command: |
+              pip3 install awscli
+        - run:
+            name: Create Lambda package
+            command: |
+              yum install -y zip
+              cd polly_lambda && zip -r ../sam-config/lambda.zip ./*
+              cd ..
+              bash -x lambda_libararies.sh
+        
+        - run:
+            name: Upload Lambda Code to S3
+            command: |
+              aws cloudformation package \
+              --template-file sam-config/template.yaml \
+              --s3-bucket polly-bucket-madeby-cicrcleci \
+              --output-template-file sam-config/packaged-template.yaml
+
+        - run:
+            name: Deploy Lambda Changes
+            command: |
+              aws cloudformation deploy \
+              --template-file sam-config/packaged-template.yaml \
+              --stack-name polly-lambda-stack \
+              --capabilities CAPABILITY_IAM \
+              --region us-east-1
+
+workflows:
+  version: 2
+  build-lambda-and-website:
+    jobs:
+      - lambda_build
+      - build:
+          requires:
+            - lambda_build
+
+
