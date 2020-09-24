@@ -30,9 +30,9 @@ jobs:
       - run:
           name: Build Website
           command: |
-            cd voiceserverlesswebsite
+            cd serverlesspollywebsite
             hugo
 
       - deploy:
           command: |
-            aws s3 sync --delete --acl "public-read" --sse "AES256" voiceserverlesswebsite/public/ s3://first-polly-website-bucket            
+            aws s3 sync --delete --acl "public-read" --sse "AES256" serverlesspollywebsite/public/ s3://first-polly-website-bucket            
