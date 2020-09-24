@@ -1,5 +1,5 @@
 import boto3
-#from textblob import TextBlob
+from textblob import TextBlob
 import nltk
 nltk.data.path.append("/var/task/nltk_data")
 import os
