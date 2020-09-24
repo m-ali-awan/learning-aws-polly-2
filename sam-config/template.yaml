@@ -43,5 +43,5 @@ Resources:
   ArticleBucket:
       Type: 'AWS::S3::Bucket'
       Properties:
-        BucketName: "polly-bucket-madeby-circleci"                    
+        BucketName: "polly-bucket-madeby-circleci-madeby-template"                    
   
