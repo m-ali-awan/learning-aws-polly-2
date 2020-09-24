@@ -10,7 +10,7 @@ uglyurls = true
     description = "A place of excellence"
     author = "Your name"
     showVisitedLinks = true
-    pollyMediaURL = "https://s3.REGION.amazonaws.com/YOUR_POLLY_BUCKET"
+    pollyMediaURL = "https://s3.us-east-1.amazonaws.com/first-polly-website-bucket-pollysounds-bkt"
 
 [Languages]
 [Languages.en]
