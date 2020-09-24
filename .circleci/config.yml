@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Add articles to be converted to audio by Polly
           command: |
-            aws s3 sync serverlesspollywebsite/articles/ s3://polly-bucket-madeby-cicrcleci/articles/            
+            aws s3 sync serverlesspollywebsite/articles/ s3://polly-bucket-madeby-circleci/articles/            
 
  
       - run:
@@ -72,7 +72,7 @@ jobs:
             command: |
               aws cloudformation package \
               --template-file sam-config/template.yaml \
-              --s3-bucket polly-bucket-madeby-cicrcleci \
+              --s3-bucket polly-bucket-madeby-circleci \
               --output-template-file sam-config/packaged-template.yaml
 
         - run:
